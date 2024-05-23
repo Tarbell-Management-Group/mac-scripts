@@ -2,18 +2,18 @@
 # Get the serial number of the device
 SERIAL_NUMBER=$(system_profiler SPHardwareDataType | awk '/Serial/ {print $4}')
 
-# Set the HostName, LocalHostName, and ComputerName
-sudo scutil --set HostName "TMG-$SERIAL_NUMBER"
-sudo scutil --set LocalHostName "TMG-$SERIAL_NUMBER"
-sudo scutil --set ComputerName "TMG-$SERIAL_NUMBER"
+# Set the fully qualified hostname, Bonjour hostname, and computer name
+FULL_HOSTNAME="TMG-$SERIAL_NUMBER.bearsden.local"
+LOCAL_HOSTNAME="TMG-$SERIAL_NUMBER"
+COMPUTER_NAME="TMG-$SERIAL_NUMBER"
 
-# Get a list of all network services
-NETWORK_SERVICES=$(networksetup -listallnetworkservices | tail -n +2)
+sudo scutil --set HostName "$FULL_HOSTNAME"
+sudo scutil --set LocalHostName "$LOCAL_HOSTNAME"
+sudo scutil --set ComputerName "$COMPUTER_NAME"
 
-# Set the search domain for each network service
-for SERVICE in $NETWORK_SERVICES; do
-    sudo networksetup -setsearchdomains "$SERVICE" "bearsden.local"
-done
+# Flush the DNS cache
+sudo dscacheutil -flushcache
 
-echo "Device name set to TMG-$SERIAL_NUMBER"
-echo "Search domain set to bearsden.local for all network services"
+echo "Fully qualified hostname set to $FULL_HOSTNAME"
+echo "Bonjour hostname set to $LOCAL_HOSTNAME"
+echo "Computer name set to $COMPUTER_NAME"
