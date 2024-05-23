@@ -17,3 +17,5 @@ sudo dscacheutil -flushcache
 echo "Fully qualified hostname set to $FULL_HOSTNAME"
 echo "Bonjour hostname set to $LOCAL_HOSTNAME"
 echo "Computer name set to $COMPUTER_NAME"
+defaults write com.apple.systemuiserver menuExtras -array-add "/System/Library/CoreServices/Menu Extras/vpn.menu"
+killall SystemUIServer -HUP
